@@ -87,9 +87,13 @@ public class Main {
         else if ( !args[0].equals("-e") & !args[0].equals("-d") | !args[2].equals("-o")) {
             show_error();
         } else {
-            if (Integer.parseInt(args[3])< 0  | Integer.parseInt(args[3]) > 26 )
+            if (!Character.isDigit(args[3].charAt(0)))
             {
-                System.out.println("Offset must be more than 0 and less than 26 for English alphabet");
+                System.out.println("Offset must be positive number");
+            }
+            else if (Integer.parseInt(args[3])< 0  | Integer.parseInt(args[3]) > 26 )
+            {
+                System.out.println("Offset must be that more than 0 and less than 26 for English alphabet");
             }
             else {
                 char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
