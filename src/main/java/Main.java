@@ -72,6 +72,10 @@ public class Main {
         return output;
     }
 
+    public static void show_args_error()
+    {
+        System.out.println("There are must be 4 arguments");}
+
     public static void show_error()
     {
         System.out.println("Change your input to following view:");
@@ -81,39 +85,96 @@ public class Main {
         System.out.println("Int this is the value of offset for Caesar cipher");
     }
 
-    public static void main(String[] args) {
-        if (args.length != 4)
-        {   show_error();}
-        else if ( !args[0].equals("-e") & !args[0].equals("-d") | !args[2].equals("-o")) {
-            show_error();
-        } else {
-            if (!Character.isDigit(args[3].charAt(0)))
-            {
-                System.out.println("Offset must be positive number");
+    public static String[] normalize_args (String[] a) {
+        String args[] = new String[4];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = "null";
+        }
+        String e = "", d = "", text = "", o = "", offset = "";
+        int e_n = -1, d_n = -1, text_n = -1, o_n = -1, offset_n = -1;
+        int e_count = 0, d_count = 0, text_count = 0, o_count = 0, offset_count = 0;
+
+
+
+        for (int i = 0; i < a.length; i++) {
+            if (a[i].equals("-e")) {
+                e = a[i];
+                e_n = i;
+                e_count += 1;
             }
-            else if (Integer.parseInt(args[3])< 0  | Integer.parseInt(args[3]) > 26 )
-            {
-                System.out.println("Offset must be that more than 0 and less than 26 for English alphabet");
+            if (a[i].equals("-d")) {
+                d = a[i];
+                d_n = i;
+                d_count += 1;
             }
-            else {
-                char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-                int o = Integer.parseInt(args[3]);
-                String input = args[1];
-                if (args[0].equals("-e")) {
-                    String ret = encrypt_string(input, o, alphabet);
-                    System.out.println(ret);
-                    if (ret.equals(input) & (o!=0 & o!=26))
-                    {System.out.println("Remember that input string should be in English");}
-                }
-                if (args[0].equals("-d")) {
-                    String ret = decrypt_string(input, o, alphabet);
-                    System.out.println(ret);
-                    int ll = 0;
-                    if (ret.equals(input) & (o!=0 & o!=26))
-                    {System.out.println("Remember that input string should be in English");}
-                }
+            if (a[i].equals("-o")) {
+                o = a[i];
+                o_n = i;
+                o_count += 1;
+            }
+            if (Character.isDigit(a[i].charAt(0))) {
+                offset = a[i];
+                offset_n = i;
+                offset_count += 1;
             }
         }
+        if ((e_count + d_count) == 1 & o_count == 1 & offset_count == 1) {
+            if (e_count == 1) {
+                args[0] = e;
+            } else {
+                args[0] = d;
+            }
+
+            for (int i = 0; i < a.length; i++) {
+                if (i != e_n & i != d_n & i != o_n & i != offset_n) {
+                    args[1] = a[i];
+                }
+            }
+
+            args[2] = o;
+            args[3] = offset;
+
+        }
+
+        return args;
+    }
+    public static void main(String[] args) {
+        if (args.length != 4)
+        {   show_args_error();}
+        else {
+            String ar[] = normalize_args(args);
+            if (ar[0].equals("null")) {show_error();}
+            else {
+                if (!Character.isDigit(ar[3].charAt(0)))
+                {
+                    System.out.println("Offset must be positive number");
+                }
+                else if (Integer.parseInt(ar[3])< 0  | Integer.parseInt(ar[3]) > 26 )
+                {
+                    System.out.println("Offset must be that more than 0 and less than 26 for English alphabet");
+                }
+                else {
+                    char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+                    int o = Integer.parseInt(ar[3]);
+                    String input = ar[1];
+                    if (ar[0].equals("-e")) {
+                        String ret = encrypt_string(input, o, alphabet);
+                        System.out.println(ret);
+                        if (ret.equals(input) & (o!=0 & o!=26))
+                        {System.out.println("Remember that input string should be in English");}
+                    }
+                    if (ar[0].equals("-d")) {
+                        String ret = decrypt_string(input, o, alphabet);
+                        System.out.println(ret);
+                        int ll = 0;
+                        if (ret.equals(input) & (o!=0 & o!=26))
+                        {System.out.println("Remember that input string should be in English");}
+                    }
+                }
+            }
+
+        }
+
     }
 }
 
