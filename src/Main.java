@@ -108,6 +108,7 @@ public class Main {
                 if (args[0].equals("-d")) {
                     String ret = decrypt_string(input, o, alphabet);
                     System.out.println(ret);
+                    int ll = 0;
                     if (ret.equals(input) & (o!=0 & o!=26))
                     {System.out.println("Remember that input string should be in English");}
                 }
