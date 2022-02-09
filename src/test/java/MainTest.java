@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -301,6 +302,64 @@ class MainTest {
         String ar[] = new String[] {"-e","text","-o","30"};
         m.main(ar);
         assertEquals("Offset must be less than 26 for English alphabet", outContent.toString().trim());
+    }
+
+    @Test
+    void valid_arguments_for_encode_in_1251() throws UnsupportedEncodingException {
+        Main m = new Main();
+        String ar1 = "-e", ar2 = "text", ar3 = "-o", ar4 = "2";
+        String ar11 = new String(ar1.getBytes("Windows-1251"),"Windows-1251");
+        String ar21 = new String(ar2.getBytes("Windows-1251"),"Windows-1251");
+        String ar31 = new String(ar3.getBytes("Windows-1251"),"Windows-1251");
+        String ar41 = new String(ar4.getBytes("Windows-1251"),"Windows-1251");
+
+        String ar[] = new String[] {ar11,ar21,ar31,ar41};
+        m.main(ar);
+        assertEquals("vgzv", outContent.toString().trim());
+    }
+
+    @Test
+    void valid_arguments_for_decode_in_1251() throws UnsupportedEncodingException {
+        Main m = new Main();
+        String ar1 = "-d", ar2 = "text", ar3 = "-o", ar4 = "2";
+        String ar11 = new String(ar1.getBytes("Windows-1251"),"Windows-1251");
+        String ar21 = new String(ar2.getBytes("Windows-1251"),"Windows-1251");
+        String ar31 = new String(ar3.getBytes("Windows-1251"),"Windows-1251");
+        String ar41 = new String(ar4.getBytes("Windows-1251"),"Windows-1251");
+
+        String ar[] = new String[] {ar11,ar21,ar31,ar41};
+        m.main(ar);
+        assertEquals("rcvr", outContent.toString().trim());
+    }
+
+    @Test
+    void russian_text_for_encode_in_1251() throws UnsupportedEncodingException {
+        Main m = new Main();
+        String ar1 = "-e", ar2 = "текст", ar3 = "-o", ar4 = "2";
+        String ar11 = new String(ar1.getBytes("Windows-1251"),"Windows-1251");
+        String ar21 = new String(ar2.getBytes("Windows-1251"),"Windows-1251");
+        String ar31 = new String(ar3.getBytes("Windows-1251"),"Windows-1251");
+        String ar41 = new String(ar4.getBytes("Windows-1251"),"Windows-1251");
+
+        String ar[] = new String[] {ar11,ar21,ar31,ar41};
+        m.main(ar);
+        String op = outContent.toString().trim();
+        assertTrue(op.contains("Please note that the program encodes/decodes only characters that are letters of the English language"));
+    }
+
+    @Test
+    void russian_text_for_decode_in_1251() throws UnsupportedEncodingException {
+        Main m = new Main();
+        String ar1 = "-d", ar2 = "текст", ar3 = "-o", ar4 = "2";
+        String ar11 = new String(ar1.getBytes("Windows-1251"),"Windows-1251");
+        String ar21 = new String(ar2.getBytes("Windows-1251"),"Windows-1251");
+        String ar31 = new String(ar3.getBytes("Windows-1251"),"Windows-1251");
+        String ar41 = new String(ar4.getBytes("Windows-1251"),"Windows-1251");
+
+        String ar[] = new String[] {ar11,ar21,ar31,ar41};
+        m.main(ar);
+        String op = outContent.toString().trim();
+        assertTrue(op.contains("Please note that the program encodes/decodes only characters that are letters of the English language"));
     }
 
 
